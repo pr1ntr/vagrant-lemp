@@ -7,8 +7,9 @@ sudo aptitude update -q
 echo "mysql-server mysql-server/root_password password " | debconf-set-selections
 echo "mysql-server mysql-server/root_password_again password " | debconf-set-selections
 
-# Install mysql, nginx, php5-fpm
-sudo aptitude install -q -y -f mysql-server mysql-client nginx php5-fpm
+curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+# Install mysql, nginx, php5-fpm, nodejs, git
+sudo aptitude install -q -y -f mysql-server mysql-client nginx php5-fpm nodejs git
 
 # Install commonly used php packages
 sudo aptitude install -q -y -f php5-mysql php5-curl php5-gd php5-intl php-pear php5-imagick php5-imap php5-mcrypt php5-memcached php5-ming php5-ps php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl php5-xcache
@@ -17,6 +18,10 @@ sudo rm /etc/nginx/sites-available/default
 sudo touch /etc/nginx/sites-available/default
 
 sudo cat >> /etc/nginx/sites-available/default <<'EOF'
+
+
+
+
 server {
   listen   80;
 
@@ -101,3 +106,9 @@ sudo aptitude install -q -y -f phpmyadmin
 sudo service nginx restart
 
 sudo service php5-fpm restart
+
+cd /tmp
+curl -sS https://getcomposer.org/installer | php
+sudo cp composer.phar /usr/local/bin/composer
+sudo chmod +x /usr/local/bin/composer
+
